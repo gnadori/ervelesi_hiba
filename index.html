@@ -9,31 +9,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Slab:wght@500;700;900&display=swap" rel="stylesheet">
     
     <style>
-        /* --- SZÍNEK ÉS VÁLTOZÓK --- */
+        /* --- DESIGN SYSTEM PARAMÉTEREK --- */
         :root {
-            --bg-color: #F8F9FA; /* Tajga hó */
-            --text-color: #2D2A26; /* Medvebarna / Faszén */
-            --accent-primary: #D97725; /* Rozsomák borostyán */
-            --accent-secondary: #2C5E4B; /* Fenyő zöld */
+            --bg-snow: #F8F9FA;
+            --text-charcoal: #2D2A26;
+            --accent-amber: #D97725;
+            --accent-pine: #2C5E4B;
+            --surface-sand: #EAE6DF;
             --surface-white: #FFFFFF;
-            --surface-sand: #EAE6DF; /* Halvány homokszín */
             
-            --border-thick: 3px solid var(--text-color);
-            --border-thin: 1px solid var(--text-color);
-            --hard-shadow: 4px 4px 0px var(--text-color);
+            --border-thick: 3px solid var(--text-charcoal);
+            --hard-shadow: 4px 4px 0px var(--text-charcoal);
         }
 
-        /* --- ALAPVETŐ TIPOGRÁFIA ÉS RESET --- */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            background-color: var(--bg-snow);
+            color: var(--text-charcoal);
             line-height: 1.6;
             min-height: 100vh;
             display: flex;
@@ -42,558 +36,291 @@
 
         h1, h2, h3, h4 {
             font-family: 'Roboto Slab', serif;
-            font-weight: 700;
-            color: var(--text-color);
-            line-height: 1.2;
+            color: var(--text-charcoal);
+            /* Sentence case szabály: csak az első betű nagy */
+            text-transform: lowercase;
+        }
+        h1::first-letter, h2::first-letter, h3::first-letter, h4::first-letter {
+            text-transform: uppercase;
         }
 
-        /* --- FEJLÉC ÉS LÁBLÉC --- */
+        /* --- LAYOUT --- */
         header {
             border-bottom: var(--border-thick);
             padding: 1rem 2rem;
+            background-color: var(--surface-white);
             display: flex;
             align-items: center;
-            gap: 15px;
-            background-color: var(--surface-white);
+            gap: 1rem;
         }
 
-        header svg {
-            width: 32px;
-            height: 32px;
-            stroke: var(--text-color);
-            stroke-width: 2.5;
-        }
-
-        header h1 {
-            font-size: 1.5rem;
-            /* Sentence case kikényszerítése CSS-ből bonyolult, de az adatokban így van */
-        }
-
-        footer {
-            margin-top: auto;
-            background-color: var(--text-color);
-            color: var(--bg-color);
-            padding: 1.5rem 2rem;
-            text-align: center;
-            font-size: 0.9rem;
-        }
-
-        footer a {
-            color: var(--accent-primary);
-            text-decoration: none;
-        }
-
-        /* --- ELRENDEZÉS (LAYOUT) --- */
         .container {
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
             padding: 2rem;
             flex-grow: 1;
             display: grid;
-            grid-template-columns: 4fr 6fr; /* Kb 40% - 60% aszimmetrikus grid */
-            gap: 2rem;
+            grid-template-columns: 8fr 3fr; /* Fordított arány: sokkal nagyobb cikk rész */
+            gap: 3rem;
             align-items: start;
         }
 
-        @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr;
-                max-width: 800px;
-            }
+        @media (max-width: 1100px) {
+            .container { grid-template-columns: 1fr; }
         }
 
-        /* --- BAL OSZLOP: ÚJSÁGCIKK --- */
-        .article-column {
+        /* --- BAL OLDAL: CIKK (NAGYOBB) --- */
+        .article-section {
             background-color: var(--surface-sand);
             border: var(--border-thick);
-            padding: 2rem;
+            padding: 3rem;
             box-shadow: var(--hard-shadow);
-            position: relative;
         }
 
-        .newspaper-header {
-            text-align: center;
-            border-bottom: 2px solid var(--text-color);
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
+        .article-header {
+            border-bottom: 2px solid var(--text-charcoal);
+            padding-bottom: 1.5rem;
+            margin-bottom: 2rem;
         }
 
-        .newspaper-header h2 {
-            font-size: 2.2rem;
-            font-weight: 900;
-            text-transform: uppercase; /* Klasszikus újság főcím érzet */
-            letter-spacing: -1px;
-        }
-
-        .newspaper-dateline {
-            font-family: 'Inter', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            border-top: 1px solid var(--text-color);
-            border-bottom: 1px solid var(--text-color);
-            padding: 5px 0;
-            margin-top: 10px;
-            display: flex;
-            justify-content: space-between;
-        }
+        .article-header h2 { font-size: 2.5rem; }
 
         .article-image {
             width: 100%;
-            height: auto;
+            max-height: 500px;
+            object-fit: cover;
             border: var(--border-thick);
-            margin-bottom: 1rem;
-            filter: grayscale(20%) contrast(110%); /* Enyhe retro/újság hatás */
+            margin-bottom: 2rem;
         }
 
-        .article-content h3 {
-            font-size: 1.2rem;
-            margin-top: 1.5rem;
-            margin-bottom: 0.5rem;
-            border-bottom: 1px dashed var(--text-color);
-            display: inline-block;
-        }
-
-        .article-content p {
-            margin-bottom: 1rem;
-            text-align: justify;
-        }
-
-        .article-content p::first-letter {
-            /* Drop cap a Valóság kezdeténél */
+        .section-label {
             font-family: 'Roboto Slab', serif;
-            font-size: 3rem;
             font-weight: 900;
-            float: left;
-            line-height: 1;
-            padding-right: 8px;
-            margin-top: -4px;
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            display: block;
+            color: var(--accent-amber);
         }
 
-        .flawed-reasoning {
-            background-color: rgba(255, 255, 255, 0.5);
-            border-left: 4px solid var(--accent-primary);
-            padding: 1rem;
-            font-style: italic;
-            margin-top: 1rem;
-        }
-        
-        .flawed-reasoning p::first-letter {
-            font-size: inherit;
-            float: none;
-            font-family: inherit;
-            font-weight: normal;
-        }
-
-        /* --- JOBB OSZLOP: INTERAKTÍV KVÍZ --- */
-        .interactive-column {
-            background-color: var(--surface-white);
-            border: var(--border-thick);
-            box-shadow: var(--hard-shadow);
+        .flaw-box {
+            background-color: rgba(255,255,255,0.7);
             padding: 2rem;
-            border-radius: 4px;
-        }
-
-        .interactive-header {
+            border-left: 8px solid var(--accent-amber);
             margin-bottom: 2rem;
-        }
-
-        .interactive-header h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        /* GOMBOK ÉS UI ELEMEK */
-        .btn {
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            background-color: var(--surface-sand);
-            color: var(--text-color);
-            border: 2px solid var(--text-color);
-            padding: 0.8rem 1rem;
-            border-radius: 4px; /* Határozott, kissé szögletes */
-            cursor: pointer;
-            box-shadow: 3px 3px 0px var(--text-color); /* Hard shadow */
-            transition: all 0.1s ease;
-            text-align: center;
-            font-size: 0.95rem;
-        }
-
-        .btn:hover:not(:disabled) {
-            background-color: var(--surface-white);
-            transform: translate(-1px, -1px);
-            box-shadow: 4px 4px 0px var(--text-color);
-        }
-
-        .btn:active:not(:disabled) {
-            transform: translate(3px, 3px);
-            box-shadow: 0px 0px 0px var(--text-color);
-        }
-
-        .btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.6;
-            box-shadow: 1px 1px 0px var(--text-color);
-            transform: translate(2px, 2px);
-        }
-
-        /* Visszajelző színek */
-        .btn.correct {
-            background-color: var(--accent-secondary);
-            color: var(--surface-white);
-            border-color: var(--accent-secondary);
-            opacity: 1;
-        }
-
-        .btn.wrong {
-            background-color: #8B0000;
-            color: var(--surface-white);
-            border-color: #8B0000;
-        }
-
-        /* --- VISSZAJELZÉS PANEL --- */
-        .feedback-panel {
-            display: none;
-            margin-top: 2rem;
-            padding: 1.5rem;
-            border: var(--border-thick);
-            background-color: var(--surface-sand);
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .feedback-panel h4 {
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .feedback-panel.success h4 { color: var(--accent-secondary); }
-        .feedback-panel.error h4 { color: #8B0000; }
-
-        .action-link {
-            display: inline-block;
-            margin-top: 1rem;
-            color: var(--surface-white);
-            background-color: var(--accent-primary);
-            text-decoration: none;
-            padding: 0.6rem 1.2rem;
-            border: 2px solid var(--text-color);
-            box-shadow: 3px 3px 0px var(--text-color);
-            font-weight: bold;
-            transition: all 0.1s ease;
-        }
-        
-        .action-link:active {
-            transform: translate(3px, 3px);
-            box-shadow: 0px 0px 0px var(--text-color);
-        }
-
-        .next-btn-container {
-            margin-top: 2rem;
-            text-align: right;
-            border-top: 1px solid #ccc;
-            padding-top: 1rem;
-        }
-        
-        .progress {
-            font-family: 'Roboto Slab', serif;
-            font-weight: bold;
-            margin-bottom: 1rem;
+            font-style: italic;
             font-size: 1.1rem;
         }
 
+        /* Rejtett rész: A valóság */
+        .reality-box {
+            display: none; /* Alapból rejtve */
+            margin-top: 2rem;
+            padding: 2rem;
+            border: 2px dashed var(--accent-pine);
+            background-color: var(--surface-white);
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- JOBB OLDAL: INTERAKCIÓ (KISEBB) --- */
+        .quiz-section {
+            position: sticky;
+            top: 2rem;
+        }
+
+        .instruction-card {
+            background-color: var(--surface-white);
+            border: var(--border-thick);
+            padding: 1.5rem;
+            box-shadow: var(--hard-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .btn {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            background-color: var(--surface-white);
+            border: 2px solid var(--text-charcoal);
+            padding: 1rem;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.1s;
+            border-radius: 2px;
+            box-shadow: 2px 2px 0px var(--text-charcoal);
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: var(--surface-sand);
+            transform: translate(-1px, -1px);
+            box-shadow: 4px 4px 0px var(--text-charcoal);
+        }
+
+        .btn:disabled { cursor: not-allowed; opacity: 0.7; }
+
+        .btn.correct { background-color: var(--accent-pine); color: white; border-color: var(--accent-pine); }
+        .btn.wrong { background-color: #8B0000; color: white; }
+
+        .feedback-area {
+            display: none;
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            border: var(--border-thick);
+            background-color: var(--surface-sand);
+        }
+
+        .next-btn {
+            margin-top: 1rem;
+            width: 100%;
+            background-color: var(--text-charcoal);
+            color: var(--bg-snow);
+            padding: 1rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: var(--text-charcoal);
+            color: var(--bg-snow);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 4rem;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22v-3"/>
-            <path d="m5 19 7-14 7 14"/>
-            <path d="M7 14h10"/>
-        </svg>
-        <h1>Rozsomák tanár úr tudományos oldalai &mdash; Érvelési hibák felismerése</h1>
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22v-3m-7-3 7-14 7 14M7 14h10"/></svg>
+        <h1>Rozsomák tanár úr interaktív tudományos oldalai</h1>
     </header>
 
     <main class="container">
-        <section class="article-column">
-            <div class="newspaper-header">
+        <article class="article-section">
+            <div class="article-header">
                 <h2 id="article-title">Betöltés...</h2>
-                <div class="newspaper-dateline">
-                    <span>Tudományos Rovat</span>
-                    <span id="article-counter">Cikk: 1/10</span>
-                </div>
             </div>
             
-            <img id="article-image" src="" alt="Cikk illusztrációja" class="article-image" style="display: none;">
-            
-            <div class="article-content">
-                <h3>A valóság:</h3>
-                <p id="article-reality">A valóság szövege betöltés alatt...</p>
-                
-                <div class="flawed-reasoning">
-                    <h3>A hibás érvelés:</h3>
-                    <p id="article-flaw">A hibás érvelés szövege betöltés alatt...</p>
-                </div>
-            </div>
-        </section>
+            <img id="article-image" src="" alt="Cikk képe" class="article-image" onerror="this.style.display='none'">
 
-        <section class="interactive-column">
-            <div class="progress" id="progress-text">1. feladat a 10-ből</div>
-            
-            <div class="interactive-header">
-                <h3>Melyik érvelési hibát olvashattad a bal oldali cikkben?</h3>
-                <p>Kattints arra a gombra, amelyik szerinted a leginkább illik a "hibás érvelés" részhez!</p>
+            <span class="section-label">A hibás érvelés:</span>
+            <div class="flaw-box" id="article-flaw">...</div>
+
+            <div class="reality-box" id="reality-container">
+                <span class="section-label" style="color: var(--accent-pine);">A valóság:</span>
+                <p id="article-reality">...</p>
+            </div>
+        </article>
+
+        <aside class="quiz-section">
+            <div class="instruction-card">
+                <h3 id="task-counter">1/10. feladat</h3>
+                <p>Melyik érvelési hibát ismered fel a szövegben?</p>
             </div>
 
-            <div class="options-grid" id="options-container">
+            <div class="options-list" id="options-container">
                 </div>
 
-            <div class="feedback-panel" id="feedback-panel">
-                <h4 id="feedback-title">Visszajelzés</h4>
-                <p id="feedback-text"></p>
-                <a href="#" target="_blank" class="action-link" id="feedback-link">Bővebben erről az érvelési hibáról</a>
-                
-                <div class="next-btn-container">
-                    <button class="btn" id="next-btn" style="background-color: var(--text-color); color: var(--surface-white);">Következő cikk &rarr;</button>
-                </div>
+            <div class="feedback-area" id="feedback-panel">
+                <h4 id="feedback-status">Helyes!</h4>
+                <p id="feedback-msg"></p>
+                <a id="feedback-link" href="#" target="_blank" style="color: var(--accent-amber); font-weight: bold; display: block; margin: 10px 0;">Bővebben az érvelési hibáról &nearrow;</a>
+                <button class="next-btn" id="next-btn">Következő cikk &rarr;</button>
             </div>
-        </section>
+        </aside>
     </main>
 
     <footer>
         <p>Készítette: Rozsomák tanár úr | 2024</p>
-        <p style="margin-top: 5px; opacity: 0.8;">Kizárólag Public Domain (CC0) vagy szabadon felhasználható elemek. <a href="#">Részletek</a></p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">Forrás: szoveg.pdf  | Design: rozsomak_design.json </p>
     </footer>
 
     <script>
-        // Az adatok pontosan a szoveg.pdf alapján
         const articles = [
-            {
-                id: 1,
-                title: "1. Önző gépek vagyunk?",
-                image: "1.jpg",
-                reality: "Richard Dawkins evolúcióbiológus 1976-ban írta meg Az önző gén című korszakalkotó könyvét. Ebben a természetes kiválasztódást a gének szemszögéből magyarázta el, arra utalva, hogy az evolúció során azok a gének maradnak fenn, amelyek sikeresebben másolják magukat - ezt a mechanizmust nevezte metaforikusan „önzőnek\".",
-                flaw: "„Dawkins és a modern neodarwinisták elmélete azt próbálja lenyomni a torkunkon, hogy az emberek pusztán lélektelen biológiai robotok. Szerintük a genetikánk arra programozott minket, hogy az élet minden területén gátlástalanul önzők, kapzsik és kegyetlenek legyünk egymással, hiszen csak a legerősebb és legkegyetlenebb élheti túl. Mivel azonban mindannyian látjuk a mindennapokban, hogy az emberek képesek az önzetlen szeretetre, a jótékonykodásra és az empátiára, ez a sötét, embergyűlölő jövőkép nyilvánvalóan téves. Dawkins elmélete az önző génekről tehát egy megbukott ostobaság, ami semmit nem magyaráz meg az emberi természetből.\"",
-                correctFallacy: "Szalmabáb",
-                link: "https://a.te.ervelesi.hibad.hu/szalmabab"
-            },
-            {
-                id: 2,
-                title: "2. Gyilkos gyomírtó",
-                image: "2.jpg",
-                reality: "Dr. Stephanie Seneff, az MIT számítógéptudósa a 2010-es években publikált egy elhíresült grafikont. Ezen két görbe futott látványosan együtt: az autizmus diagnózisok növekvő száma és a glifozát nevű gyomirtó (amelyet gyakran használnak GMO-növényeknél) növekvő amerikai felhasználása.",
-                flaw: "„Nézzék meg alaposan ezt a hivatalos adatokból készült grafikont: ahogy a kilencvenes évektől kezdve évről évre drasztikusan nőtt a génmódosított, glifozáttal permetezett növények aránya a mezőgazdaságban, hajszálpontosan ugyanúgy lőtt ki az autista gyerekek száma is az Egyesült Államokban. A két görbe szinte tökéletesen fedi egymást, ami kizárja a véletlen egybeesést. Ez a statisztika megdönthetetlen bizonyítéka annak, hogy a GMO-k és a hozzájuk használt vegyszerek okozzák az autizmust a gyermekeinknél. Amíg nem ettünk ilyen laborban összetákolt növényeket, addig töredékennyi autista volt, tehát egyértelmű, hogy az étel tesz minket beteggé.\"",
-                correctFallacy: "Hamis okozat",
-                link: "https://a.te.ervelesi.hibad.hu/hamis-okozat"
-            },
-            {
-                id: 3,
-                title: "3. Babák rendelésre",
-                image: "3.jpg",
-                reality: "A CRISPR-Cas9 génszerkesztési technológiáért Emmanuelle Charpentier és Jennifer Doudna Nobel-díjat kaptak. A módszert ma már sikeresen használják felnőtt betegeknél például a sarlósejtes vérszegénység gyógyítására.",
-                flaw: "„Ha ma engedélyezzük a kutatóknak, hogy a CRISPR technológiával legálisan belenyúljanak az emberi DNS-be, és kijavítsanak akár csak egyetlen apró genetikai hibát is egy felnőtt betegben, azzal végérvényesen rálépünk egy megállíthatatlan lejtőre. Jövőre már a szülők a szem- és hajszínt fogják katalógusból megrendelni a klinikákon. Tíz év múlva pedig eljutunk oda, hogy a gazdagok szuperintelligens, genetikailag tökéletesített dizájnerbébiket fognak gyártatni maguknak. A végén a természetes úton született, genetikailag nem módosított emberek egy elnyomott, biológiai alsóbb osztályba fognak kényszerülni, ezért a génszerkesztést azonnal és teljesen be kell tiltani.\"",
-                correctFallacy: "Csúszós lejtő",
-                link: "https://a.te.ervelesi.hibad.hu/csuszos-lejto"
-            },
-            {
-                id: 4,
-                title: "4. A genetika atyja",
-                image: "4.jpg",
-                reality: "James Watson a DNS kettős hélix szerkezetének felfedezéséért kapott Nobel-díjat, és ő volt a Humán Genom Projekt (HGP) első vezetője. Élete későbbi szakaszában Watson nyíltan rasszista, szexista és homofób kijelentéseket tett, ami miatt a tudományos közösség kiközösítette.",
-                flaw: "„Hogyan is vehetnénk komolyan a Humán Genom Projekt eredményeit, vagy egyáltalán a modern DNS-szekvenálást, amikor az egészet maga James Watson indította el és irányította? Egy olyan emberről beszélünk, aki nyíltan hirdette a fehér felsőbbrendűséget, mélységesen rasszista volt, és vállalhatatlan megjegyzéseket tett a női kutatókra. Egy erkölcsileg ennyire romlott, előítéletes személy nyilvánvalóan képtelen objektív tudományos munkára. Watson egész pályafutását és a genetikai kutatásait áthatja az ő kártékony ideológiája, így a felfedezései tudományosan is teljesen megbízhatatlanok és értékelhetetlenek.\"",
-                correctFallacy: "Ad hominem",
-                link: "https://a.te.ervelesi.hibad.hu/szemelyeskedes"
-            },
-            {
-                id: 5,
-                title: "5. A génpiszkálás áldozata",
-                image: "5.jpg",
-                reality: "A modern génterápiák ma már életeket mentenek. A technológia korai szakaszában azonban történtek tragédiák: 1999-ben egy 18 éves fiú, Jesse Gelsinger meghalt egy kísérleti génterápiás eljárás során egy végzetes immunreakció miatt. Ebből tanulva a tudomány sokkal biztonságosabb eljárásokat fejlesztett ki.",
-                flaw: "„A gyógyszergyárak lobbizhatnak a legújabb génterápiák mellett, és mutogathatják a sok ezer fős, sikeres klinikai tesztekről szóló statisztikáikat, engem ezek a papírok nem hatnak meg. Jesse Gelsinger is egy életerős, fiatal fiú volt, aki hitt a tudósoknak, beadattak vele egy ilyen génkészítményt, és néhány nap múlva szörnyű kínok között meghalt. Aki ismeri az ő személyes, tragikus történetét, az pontosan tudja, mi a valóság a számok mögött. Egyetlen ilyen eset is tökéletesen bizonyítja, hogy a génsebészet valójában felelőtlen emberkísérlet, és soha senkinek nem szabadna alávetnie magát ilyen kezeléseknek, függetlenül attól, mit mondanak az orvosok.\"",
-                correctFallacy: "Anekdotikus érvelés",
-                link: "https://a.te.ervelesi.hibad.hu/anekdotikus-bizonyitas"
-            },
-            {
-                id: 6,
-                title: "6. Kísért a múlt",
-                image: "6.jpg",
-                reality: "A modern klinikai genetikában léteznek non-invazív prenatális tesztek (NIPT), amelyek az anyai vérből szűrnek ki súlyos magzati kromoszóma-rendellenességeket. A cél a szülők tájékoztatása, hogy felkészülhessenek, vagy élhessenek az abortusz jogával ott, ahol a törvény ezt engedi.",
-                flaw: "„A modern genetikai tanácsadók, akik a terhes nőket rutinszerűen mindenféle DNS-szűrésekre küldik a beteg magzatok 'kiszűrése' és a terhességek megszakítása céljából, valójában pontosan azt a sötét programot folytatják, amit a Harmadik Birodalom elkezdett. Ez színtiszta eugenika, az árja fajelmélet modern, kórházi köntösben, ahol ismét a tudósok és az állam akarja eldönteni, hogy kinek van joga megszületni és kinek nincs. Aki támogatja a prenatális szűrést, az gyakorlatilag Mengele örökségét élteti, és az emberi élet szelektálására mond igent.\"",
-                correctFallacy: "Náci kártya",
-                link: "https://a.te.ervelesi.hibad.hu/naci-kommunista-liberalis-kartya"
-            },
-            {
-                id: 7,
-                title: "7. Kinek kell a génfertőzött szemét?",
-                image: "7.jpg",
-                reality: "Az Egészségügyi Világszervezet (WHO) és az Európai Élelmiszerbiztonsági Hatóság (EFSA) is egyetért abban, hogy a piacon lévő engedélyezett GMO-k biztonságosak. Egy hivatalos Eurobarométer felmérésből azonban kiderült, hogy az európai lakosság jelentős része retteg ezektől a termékektől.",
-                flaw: "„Hiába lobogtatják a biológusok a laboratóriumi tanulmányaikat arról, hogy a génmódosított élelmiszerek állítólag biztonságosak, ha a társadalom teljesen máshogy gondolja. Nézzék meg a friss felméréseket: európai polgárok tízmilliói rettegnek ezektől a termékektől, és határozottan elutasítják, hogy ilyesmi kerüljön a boltok polcaira. Mivel az emberek ilyen elsöprő többsége - köztük rengeteg édesanya és gazdálkodó - érzi úgy a józan paraszti eszére hallgatva, hogy a GMO veszélyes és természetellenes, a tudósoknak egyszerűen el kell fogadniuk, hogy tévednek. A laboratóriumi ételek károsak az egészségre, hiszen nem tévedhet egyszerre ennyi ember.\"",
-                correctFallacy: "Közvélekedésre hivatkozás",
-                link: "https://a.te.ervelesi.hibad.hu/kozvelekedesre-hivatkozas"
-            },
-            {
-                id: 8,
-                title: "8. Minden csak véletlen?",
-                image: "8.jpg",
-                reality: "Michael Behe biokémikus az intelligens tervezés mozgalmának szószólója. Fő érve a baktériumostor egyszerűsíthetetlen összetettsége, amely szerinte túl bonyolult ahhoz, hogy evolúciós lépéseken keresztül alakuljon ki, ezért egy teremtőre utal.",
-                flaw: "„A földi élet legbonyolultabb molekuláris gépezeteit, mint amilyen a baktériumostor is, egyértelműen egy felsőbbrendű, Intelligens Tervező alkotta meg, nem pedig a vak véletlen. Mivel az evolúcióbiológusok a mai napig nem tudtak előállni egy mikroszkópikus, másodpercről másodpercre dokumentált videóval vagy megkérdőjelezhetetlen fosszilis bizonyítékkal arról, hogyan állt össze ez a motor magától az őslevesben, a darwini elmélet kudarcot vallott. Amíg a tudósok nem tudják kétséget kizáróan bebizonyítani, hogy Isten vagy egy idegen civilizáció beavatkozása matematikailag lehetetlen volt a folyamat során, addig az intelligens tervezés tényként kezelendő.\"",
-                correctFallacy: "Bizonyítási kényszer",
-                link: "https://a.te.ervelesi.hibad.hu/bizonyitasi-kenyszer-atharitasa"
-            },
-            {
-                id: 9,
-                title: "9. Az agrárlobbi trójai falova",
-                image: "9.jpg",
-                reality: "Az „Aranyrizs\" egy genetikailag módosított rizsfajta, amely béta-karotint termel, célja az A-vitamin-hiány megelőzése. Fejlesztői humanitárius célokra, ingyenes licenccel bocsátották a kisgazdák rendelkezésére, mégis sok aktivista (például Vandana Shiva) küzd a betiltásáért, multinacionális trójai falónak tartva azt.",
-                flaw: "„A modern mezőgazdaság jövőjét és az emberiség élelmezését illetően csak két, egymást kizáró választásunk maradt a 21. században. Vagy engedélyezzük az Aranyrizst és a többi GMO-t, amivel végleg és visszafordíthatatlanul kiszolgáltatjuk a világ összes farmerét a kapzsi multinacionális cégek vetőmag-monopóliumának, elpusztítva a biodiverzitást. Vagy- és ez az egyetlen helyes út - globálisan betiltjuk az összes génmódosított növényt, és minden erőnkkel megvédjük a hagyományos ökológiai gazdálkodást. Nincs harmadik út, kompromisszumnak helye nincs: dönteni kell a gonosz multik és a tiszta természet között.\"",
-                correctFallacy: "Hamis dilemma",
-                link: "https://a.te.ervelesi.hibad.hu/hamis-dilemma"
-            },
-            {
-                id: 10,
-                title: "10. A víz emlékezik",
-                image: "10.jpg",
-                reality: "Luc Montagnier francia virológus 2008-ban kapott orvosi Nobel-díjat a HIV-vírus felfedezéséért. Élete utolsó éveiben egyre inkább eltávolodott a tudományos konszenzustól: azt állította, hogy a DNS elektromágneses hullámokat bocsát ki, és saját szerkezetét a puszta vízen keresztül képes „teleportálni\".",
-                flaw: "„Hogyan merészelik a fősodratú, egyetemi asztalok mögött ülő genetikusok arrogánsan tagadni azt a tényt, hogy a DNS elektromágneses rezgéseket bocsát ki, és hogy a víz képes megjegyezni a genetikai információt? Ezt az elméletet nem egy jöttment sarlatán vagy egy internetes áltudós találta ki, hanem Dr. Luc Montagnier, aki Nobel-díjat kapott a HIV vírus felfedezéséért! Egy ilyen kaliberű tudós, akinek a munkásságát a világ legnagyobb tudományos díjával ismerték el, nyilvánvalóan többet tud a biológiáról, mint az őt kritizáló átlagos kutatók. Aki egy ekkora orvosi zseni szavát kétségbe vonja, az maga a tudománytagadó.\"",
-                correctFallacy: "Tekintélyre hivatkozás",
-                link: "https://a.te.ervelesi.hibad.hu/tekintelyre-hivatkozas"
-            }
+            { id: 1, title: "1. Önző gépek vagyunk?", reality: "Richard Dawkins evolúcióbiológus 1976-ban írta meg Az önző gén című korszakalkotó könyvét. Ebben a természetes kiválasztódást a gének szemszögéből magyarázta el, arra utalva, hogy az evolúció során azok a gének maradnak fenn, amelyek sikeresebben másolják magukat - ezt a mechanizmust nevezte metaforikusan „önzőnek\".", flaw: "„Dawkins és a modern neodarwinisták elmélete azt próbálja lenyomni a torkunkon, hogy az emberek pusztán lélektelen biológiai robotok. Szerintük a genetikánk arra programozott minket, hogy az élet minden területén gátlástalanul önzők, kapzsik és kegyetlenek legyünk egymással, hiszen csak a legerősebb és legkegyetlenebb élheti túl. Mivel azonban mindannyian látjuk a mindennapokban, hogy az emberek képesek az önzetlen szeretetre, a jótékonykodásra és az empátiára, ez a sötét, embergyűlölő jövőkép nyilvánvalóan téves. Dawkins elmélete az önző génekről tehát egy megbukott ostobaság, ami semmit nem magyaráz meg az emberi természetből.\"", correct: "Szalmabáb", link: "https://a.te.ervelesi.hibad.hu/szalmabab" },
+            { id: 2, title: "2. Gyilkos gyomírtó", reality: "Dr. Stephanie Seneff, az MIT számítógéptudósa a 2010-es években publikált egy elhíresült grafikont. Ezen két görbe futott látványosan együtt: az autizmus diagnózisok növekvő száma és a glifozát nevű gyomirtó növekvő amerikai felhasználása.", flaw: "„Nézzék meg alaposan ezt a hivatalos adatokból készült grafikont: ahogy a kilencvenes évektől kezdve évről évre drasztikusan nőtt a génmódosított, glifozáttal permetezett növények aránya a mezőgazdaságban, hajszálpontosan ugyanúgy lőtt ki az autista gyerekek száma is az Egyesült Államokban. A két görbe szinte tökéletesen fedi egymást, ami kizárja a véletlen egybeesést. Ez a statisztika megdönthetetlen bizonyítéka annak, hogy a GMO-k és a hozzájuk használt vegyszerek okozzák az autizmust a gyermekeinknél.\"", correct: "Hamis okozat", link: "https://a.te.ervelesi.hibad.hu/hamis-okozat" },
+            { id: 3, title: "3. Babák rendelésre", reality: "A CRISPR-Cas9 génszerkesztési technológiáért Nobel-díjat adtak. A módszert ma már sikeresen használják felnőtt betegeknél például a sarlósejtes vérszegénység gyógyítására.", flaw: "„Ha ma engedélyezzük a kutatóknak, hogy a CRISPR technológiával legálisan belenyúljanak az emberi DNS-be, azzal végérvényesen rálépünk egy megállíthatatlan lejtőre. Jövőre már a szülők a szem- és hajszínt fogják katalógusból megrendelni a klinikákon. Tíz év múlva pedig eljutunk oda, hogy a gazdagok szuperintelligens dizájnerbébiket fognak gyártatni. A végén a természetes emberek egy elnyomott osztályba fognak kényszerülni.\"", correct: "Csúszós lejtő", link: "https://a.te.ervelesi.hibad.hu/csuszos-lejto" },
+            { id: 4, title: "4. A genetika atyja", reality: "James Watson a DNS szerkezetének felfedezéséért kapott Nobel-díjat. Élete későbbi szakaszában Watson nyíltan rasszista kijelentéseket tett, ami miatt a tudományos közösség kiközösítette.", flaw: "„Hogyan is vehetnénk komolyan a Humán Genom Projekt eredményeit, amikor az egészet maga James Watson indította el? Egy olyan emberről beszélünk, aki nyíltan hirdette a fehér felsőbbrendűséget. Egy erkölcsileg ennyire romlott személy nyilvánvalóan képtelen objektív tudományos munkára. Watson felfedezései tudományosan is teljesen megbízhatatlanok.\"", correct: "Ad hominem", link: "https://a.te.ervelesi.hibad.hu/szemelyeskedes" },
+            { id: 5, title: "5. A génpiszkálás áldozata", reality: "A modern génterápiák ma már életeket mentenek. A technológia korai szakaszában azonban történtek tragédiák: 1999-ben Jesse Gelsinger meghalt egy kísérleti eljárás során. Ebből tanulva a tudomány biztonságosabb eljárásokat fejlesztett ki.", flaw: "„Engem a statisztikák nem hatnak meg. Jesse Gelsinger is egy életerős fiú volt, beadattak vele egy készítményt, és szörnyű kínok között meghalt. Aki ismeri az ő tragikus történetét, az tudja a valóságot a számok mögött. Egyetlen ilyen eset is bizonyítja, hogy a génsebészet felelőtlen emberkísérlet.\"", correct: "Anekdotikus érvelés", link: "https://a.te.ervelesi.hibad.hu/anekdotikus-bizonyitas" },
+            { id: 6, title: "6. Kísért a múlt", reality: "A modern genetikában léteznek tesztek, amelyek súlyos rendellenességeket szűrnek ki. A cél a szülők tájékoztatása, hogy felkészülhessenek a jövőre.", flaw: "„A modern genetikai tanácsadók valójában pontosan azt a sötét programot folytatják, amit a Harmadik Birodalom elkezdett. Ez színtiszta eugenika modern köntösben. Aki támogatja a prenatális szűrést, az gyakorlatilag Mengele örökségét élteti.\"", correct: "Náci kártya", link: "https://a.te.ervelesi.hibad.hu/naci-kommunista-liberalis-kartya" },
+            { id: 7, title: "7. Kinek kell a génfertőzött szemét?", reality: "A WHO és az EFSA szerint az engedélyezett GMO-k biztonságosak. Egy felmérés szerint azonban az európai lakosság jelentős része mégis tart tőlük.", flaw: "„Hiába lobogtatják a tanulmányokat a biztonságról, ha a társadalom máshogy gondolja. Európai polgárok tízmilliói rettegnek ezektől a termékektől. Mivel ennyi ember érzi úgy, hogy a GMO veszélyes, a tudósoknak el kell fogadniuk, hogy tévednek. Nem tévedhet egyszerre ennyi ember.\"", correct: "Közvélekedésre hivatkozás", link: "https://a.te.ervelesi.hibad.hu/kozvelekedesre-hivatkozas" },
+            { id: 8, title: "8. Minden csak véletlen?", reality: "Michael Behe biokémikus szerint a baktériumostor túl bonyolult az evolúcióhoz, ezért egy teremtőre utal. Ezt hívják 'intelligens tervezésnek'.", flaw: "„Mivel az evolúcióbiológusok a mai napig nem tudtak előállni egy videóval arról, hogyan állt össze ez a motor az őslevesben, a darwini elmélet kudarcot vallott. Amíg a tudósok nem tudják bebizonyítani, hogy Isten beavatkozása matematikailag lehetetlen volt, addig az intelligens tervezés tényként kezelendő.\"", correct: "Bizonyítási kényszer", link: "https://a.te.ervelesi.hibad.hu/bizonyitasi-kenyszer-atharitasa" },
+            { id: 9, title: "9. Az agrárlobbi trójai falova", reality: "Az Aranyrizs célja az A-vitamin-hiány megelőzése. Fejlesztői humanitárius célokra, ingyenesen adták át a kisgazdáknak.", flaw: "„Csak két választásunk maradt: vagy engedélyezzük az Aranyrizst és kiszolgáltatjuk a világot a multinacionális cégeknek, vagy globálisan betiltjuk az összes GMO-t és megvédjük a természetet. Nincs harmadik út, dönteni kell a gonosz multik és a tiszta természet között.\"", correct: "Hamis dilemma", link: "https://a.te.ervelesi.hibad.hu/hamis-dilemma" },
+            { id: 10, title: "10. A víz emlékezik", reality: "Luc Montagnier Nobel-díjat kapott a HIV felfedezéséért. Később azt állította, hogy a DNS hullámokat bocsát ki és a víz képes 'teleportálni' a szerkezetét.", flaw: "„Hogyan merészelik a genetikusok tagadni ezt? Ezt nem egy áltudós találta ki, hanem Dr. Luc Montagnier, aki Nobel-díjas! Egy ilyen kaliberű tudós nyilvánvalóan többet tud a biológiáról, mint az őt kritizáló átlagos kutatók. Aki egy ekkora zseni szavát kétségbe vonja, az tudománytagadó.\"", correct: "Tekintélyre hivatkozás", link: "https://a.te.ervelesi.hibad.hu/tekintelyre-hivatkozas" }
         ];
 
-        // Az összes lehetséges érvelési hiba a gombokhoz (fix 10 db)
-        const allFallacies = [
-            "Szalmabáb", 
-            "Hamis okozat", 
-            "Csúszós lejtő", 
-            "Ad hominem", 
-            "Anekdotikus érvelés", 
-            "Náci kártya", 
-            "Közvélekedésre hivatkozás", 
-            "Bizonyítási kényszer", 
-            "Hamis dilemma", 
-            "Tekintélyre hivatkozás"
-        ];
+        const fallacies = ["Szalmabáb", "Hamis okozat", "Csúszós lejtő", "Ad hominem", "Anekdotikus érvelés", "Náci kártya", "Közvélekedésre hivatkozás", "Bizonyítási kényszer", "Hamis dilemma", "Tekintélyre hivatkozás"];
 
-        let currentIndex = 0;
-        let isAnswered = false;
+        let currentIdx = 0;
 
-        // DOM Elemek
-        const titleEl = document.getElementById('article-title');
-        const counterEl = document.getElementById('article-counter');
-        const imageEl = document.getElementById('article-image');
-        const realityEl = document.getElementById('article-reality');
-        const flawEl = document.getElementById('article-flaw');
-        const optionsContainer = document.getElementById('options-container');
-        const feedbackPanel = document.getElementById('feedback-panel');
-        const feedbackTitle = document.getElementById('feedback-title');
-        const feedbackText = document.getElementById('feedback-text');
-        const feedbackLink = document.getElementById('feedback-link');
-        const nextBtn = document.getElementById('next-btn');
-        const progressText = document.getElementById('progress-text');
-
-        // Inicializálás
-        function loadArticle(index) {
-            isAnswered = false;
-            const article = articles[index];
+        function init() {
+            const art = articles[currentIdx];
+            document.getElementById('article-title').textContent = art.title;
+            document.getElementById('article-image').src = `${art.id}.jpg`;
+            document.getElementById('article-flaw').textContent = art.flaw;
+            document.getElementById('article-reality').textContent = art.reality;
+            document.getElementById('task-counter').textContent = `${currentIdx + 1}/10. feladat`;
             
-            // Cikk frissítése
-            titleEl.textContent = article.title;
-            counterEl.textContent = `Cikk: ${index + 1}/10`;
-            progressText.textContent = `${index + 1}. feladat a 10-ből`;
-            realityEl.textContent = article.reality;
-            flawEl.textContent = article.flaw;
+            // Rejtés visszaállítása
+            document.getElementById('reality-container').style.display = 'none';
+            document.getElementById('feedback-panel').style.display = 'none';
             
-            // Kép frissítése (ha van fizikai fájl, ha nincs, elrejtjük a hibát)
-            imageEl.src = article.image;
-            imageEl.style.display = 'block';
-            imageEl.onerror = () => { imageEl.style.display = 'none'; };
-
-            // Gombok generálása
-            optionsContainer.innerHTML = '';
+            // Gombok
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
             
-            // Véletlenszerű sorrend a gomboknak, hogy ne mindig ugyanott legyen a jó válasz
-            const shuffledFallacies = [...allFallacies].sort(() => Math.random() - 0.5);
-
-            shuffledFallacies.forEach(fallacy => {
-                const btn = document.createElement('button');
-                btn.className = 'btn';
-                btn.textContent = fallacy;
-                btn.onclick = () => handleAnswer(btn, fallacy, article.correctFallacy, article.link);
-                optionsContainer.appendChild(btn);
+            // Véletlen sorrend a gomboknak
+            [...fallacies].sort(() => Math.random() - 0.5).forEach(f => {
+                const b = document.createElement('button');
+                b.className = 'btn';
+                b.textContent = f;
+                b.onclick = () => check(f, b);
+                container.appendChild(b);
             });
-
-            // Visszajelző panel elrejtése
-            feedbackPanel.style.display = 'none';
-            feedbackPanel.className = 'feedback-panel';
-            
-            // Következő gomb szövegének cseréje, ha az utolsó feladat jön
-            if (index === articles.length - 1) {
-                nextBtn.textContent = "Újraindítás";
-            } else {
-                nextBtn.innerHTML = "Következő cikk &rarr;";
-            }
         }
 
-        // Válasz ellenőrzése
-        function handleAnswer(clickedBtn, selectedFallacy, correctFallacy, link) {
-            if (isAnswered) return; // Ha már válaszolt, nem lehet újra kattintani
-            isAnswered = true;
-
-            const allButtons = optionsContainer.querySelectorAll('button');
+        function check(selected, btn) {
+            const art = articles[currentIdx];
+            const btns = document.querySelectorAll('.btn');
+            btns.forEach(b => b.disabled = true);
             
-            // Gombok formázása
-            allButtons.forEach(btn => {
-                btn.disabled = true;
-                if (btn.textContent === correctFallacy) {
-                    btn.classList.add('correct'); // A helyes válasz zöld lesz
-                } else if (btn === clickedBtn) {
-                    btn.classList.add('wrong'); // Ha rosszra kattintott, az piros lesz
-                }
-            });
-
-            // Visszajelzés tartalmának beállítása
-            feedbackPanel.style.display = 'block';
-            feedbackLink.href = link;
+            // Valóság felfedése
+            document.getElementById('reality-container').style.display = 'block';
+            document.getElementById('feedback-panel').style.display = 'block';
             
-            if (selectedFallacy === correctFallacy) {
-                feedbackPanel.classList.add('success');
-                feedbackTitle.innerHTML = "✅ Helyes válasz!";
-                feedbackText.innerHTML = `Kiváló! A szövegben a <strong>${correctFallacy}</strong> érvelési hibát olvashattad.`;
+            if(selected === art.correct) {
+                btn.classList.add('correct');
+                document.getElementById('feedback-status').textContent = "✅ Helyes!";
+                document.getElementById('feedback-msg').textContent = "Pontosan felismerted a hibát.";
             } else {
-                feedbackPanel.classList.add('error');
-                feedbackTitle.innerHTML = "❌ Helytelen válasz!";
-                feedbackText.innerHTML = `Sajnos nem ez a jó megoldás. A szövegben található hiba a <strong>${correctFallacy}</strong> volt.`;
+                btn.classList.add('wrong');
+                document.getElementById('feedback-status').textContent = "❌ Nem talált.";
+                document.getElementById('feedback-msg').textContent = `A helyes válasz a(z) ${art.correct} lett volna.`;
+                // Jelöljük meg a jót is
+                btns.forEach(b => { if(b.textContent === art.correct) b.classList.add('correct'); });
             }
+            
+            document.getElementById('feedback-link').href = art.link;
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
-        // Következő cikk betöltése
-        nextBtn.onclick = () => {
-            currentIndex++;
-            if (currentIndex >= articles.length) {
-                currentIndex = 0; // Vissza az elejére
-            }
-            loadArticle(currentIndex);
-            window.scrollTo({ top: 0, behavior: 'smooth' }); // Visszagörgetés a tetejére
+        document.getElementById('next-btn').onclick = () => {
+            currentIdx = (currentIdx + 1) % articles.length;
+            init();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         };
 
-        // Oldal indulása
-        window.onload = () => loadArticle(0);
-
+        window.onload = init;
     </script>
 </body>
 </html>
