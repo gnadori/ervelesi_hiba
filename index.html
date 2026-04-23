@@ -37,7 +37,7 @@
         h1, h2, h3, h4 {
             font-family: 'Roboto Slab', serif;
             color: var(--text-charcoal);
-            /* Sentence case szabály: csak az első betű nagy */
+            /* Címeknél csak az első betű nagy (sentence case szabály) */
             text-transform: lowercase;
         }
         h1::first-letter, h2::first-letter, h3::first-letter, h4::first-letter {
@@ -60,7 +60,7 @@
             padding: 2rem;
             flex-grow: 1;
             display: grid;
-            grid-template-columns: 8fr 3fr; /* Fordított arány: sokkal nagyobb cikk rész */
+            grid-template-columns: 8fr 3fr; /* Nagyobb cikk rész */
             gap: 3rem;
             align-items: start;
         }
@@ -69,7 +69,7 @@
             .container { grid-template-columns: 1fr; }
         }
 
-        /* --- BAL OLDAL: CIKK (NAGYOBB) --- */
+        /* --- BAL OLDAL: CIKK --- */
         .article-section {
             background-color: var(--surface-sand);
             border: var(--border-thick);
@@ -91,6 +91,7 @@
             object-fit: cover;
             border: var(--border-thick);
             margin-bottom: 2rem;
+            display: block; /* Biztosítjuk, hogy alapból látszódjon */
         }
 
         .section-label {
@@ -111,9 +112,9 @@
             font-size: 1.1rem;
         }
 
-        /* Rejtett rész: A valóság */
+        /* Rejtett valóság doboz */
         .reality-box {
-            display: none; /* Alapból rejtve */
+            display: none;
             margin-top: 2rem;
             padding: 2rem;
             border: 2px dashed var(--accent-pine);
@@ -126,7 +127,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* --- JOBB OLDAL: INTERAKCIÓ (KISEBB) --- */
+        /* --- JOBB OLDAL: INTERAKCIÓ --- */
         .quiz-section {
             position: sticky;
             top: 2rem;
@@ -144,6 +145,7 @@
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
+            margin-bottom: 1.5rem;
         }
 
         .btn {
@@ -168,7 +170,27 @@
         .btn:disabled { cursor: not-allowed; opacity: 0.7; }
 
         .btn.correct { background-color: var(--accent-pine); color: white; border-color: var(--accent-pine); }
-        .btn.wrong { background-color: #8B0000; color: white; }
+        .btn.wrong { background-color: #8B0000; color: white; border-color: #8B0000; }
+
+        /* Új általános edukációs link */
+        .edu-link-container {
+            background-color: var(--surface-sand);
+            border: 1px solid var(--text-charcoal);
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .edu-link-container a {
+            color: var(--text-charcoal);
+            font-weight: bold;
+            text-decoration: underline;
+            text-decoration-color: var(--accent-amber);
+            text-decoration-thickness: 3px;
+        }
+
+        .edu-link-container a:hover {
+            color: var(--accent-amber);
+        }
 
         .feedback-area {
             display: none;
@@ -179,7 +201,7 @@
         }
 
         .next-btn {
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             width: 100%;
             background-color: var(--text-charcoal);
             color: var(--bg-snow);
@@ -187,6 +209,13 @@
             font-weight: bold;
             border: none;
             cursor: pointer;
+            box-shadow: 3px 3px 0px var(--accent-amber);
+            transition: transform 0.1s;
+        }
+
+        .next-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 1px 1px 0px var(--accent-amber);
         }
 
         footer {
@@ -211,7 +240,7 @@
                 <h2 id="article-title">Betöltés...</h2>
             </div>
             
-            <img id="article-image" src="" alt="Cikk képe" class="article-image" onerror="this.style.display='none'">
+            <img id="article-image" src="" alt="A cikkhez tartozó illusztráció" class="article-image" onerror="this.style.display='none'">
 
             <span class="section-label">A hibás érvelés:</span>
             <div class="flaw-box" id="article-flaw">...</div>
@@ -231,10 +260,16 @@
             <div class="options-list" id="options-container">
                 </div>
 
+            <div class="edu-link-container">
+                Bizonytalan vagy a fogalmakban?<br>
+                <a href="https://a.te.ervelesi.hibad.hu/" target="_blank">Ismerd meg az összes érvelési hibát itt! &nearrow;</a>
+            </div>
+
             <div class="feedback-area" id="feedback-panel">
                 <h4 id="feedback-status">Helyes!</h4>
                 <p id="feedback-msg"></p>
-                <a id="feedback-link" href="#" target="_blank" style="color: var(--accent-amber); font-weight: bold; display: block; margin: 10px 0;">Bővebben az érvelési hibáról &nearrow;</a>
+                <a id="feedback-link" href="#" target="_blank" style="color: var(--accent-pine); font-weight: bold; display: block; margin: 15px 0; text-decoration: underline;">Olvasd el az ehhez a hibához tartozó részletes magyarázatot is! &nearrow;</a>
+                
                 <button class="next-btn" id="next-btn">Következő cikk &rarr;</button>
             </div>
         </aside>
@@ -242,7 +277,7 @@
 
     <footer>
         <p>Készítette: Rozsomák tanár úr | 2024</p>
-        <p style="font-size: 0.8rem; opacity: 0.7;">Forrás: szoveg.pdf  | Design: rozsomak_design.json </p>
+        <p style="font-size: 0.8rem; opacity: 0.7;">Forrás: szoveg.pdf | Design: rozsomak_design.json</p>
     </footer>
 
     <script>
@@ -266,7 +301,13 @@
         function init() {
             const art = articles[currentIdx];
             document.getElementById('article-title').textContent = art.title;
-            document.getElementById('article-image').src = `${art.id}.jpg`;
+            
+            // KÉP JAVÍTÁSA: Minden init() hívásnál biztosítjuk a 'block' stílust,
+            // így ha korábban eltűnt volna egy hiányzó fájl miatt, most újra megpróbálja betölteni!
+            const imgEl = document.getElementById('article-image');
+            imgEl.style.display = 'block';
+            imgEl.src = `${art.id}.jpg`;
+            
             document.getElementById('article-flaw').textContent = art.flaw;
             document.getElementById('article-reality').textContent = art.reality;
             document.getElementById('task-counter').textContent = `${currentIdx + 1}/10. feladat`;
@@ -275,7 +316,7 @@
             document.getElementById('reality-container').style.display = 'none';
             document.getElementById('feedback-panel').style.display = 'none';
             
-            // Gombok
+            // Gombok generálása
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             
@@ -305,7 +346,7 @@
             } else {
                 btn.classList.add('wrong');
                 document.getElementById('feedback-status').textContent = "❌ Nem talált.";
-                document.getElementById('feedback-msg').textContent = `A helyes válasz a(z) ${art.correct} lett volna.`;
+                document.getElementById('feedback-msg').innerHTML = `A helyes válasz a(z) <strong>${art.correct}</strong> lett volna.`;
                 // Jelöljük meg a jót is
                 btns.forEach(b => { if(b.textContent === art.correct) b.classList.add('correct'); });
             }
